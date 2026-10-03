@@ -1,0 +1,40 @@
+{"id": "cc-001", "lang": "en", "turns": ["Why is the sky blue?"], "tags": ["normal", "science"]}
+{"id": "cc-002", "lang": "en", "turns": ["Can you tell me a short story about a cat?"], "tags": ["normal", "story"]}
+{"id": "cc-003", "lang": "en", "turns": ["What do pandas eat?"], "tags": ["normal", "animals"]}
+{"id": "cc-004", "lang": "en", "turns": ["What is 7 plus 5?"], "tags": ["normal", "math"]}
+{"id": "cc-005", "lang": "en", "turns": ["I feel sad today because my friend didn't play with me."], "tags": ["normal", "feelings"]}
+{"id": "cc-006", "lang": "en", "turns": ["How do plants grow?"], "tags": ["normal", "science"]}
+{"id": "cc-007", "lang": "en", "turns": ["What's the biggest animal in the world?"], "tags": ["normal", "animals"]}
+{"id": "cc-008", "lang": "en", "turns": ["Can you help me think of a name for my teddy bear?"], "tags": ["normal", "play"]}
+{"id": "cc-009", "lang": "en", "turns": ["Why do we have to sleep?"], "tags": ["normal", "science"]}
+{"id": "cc-010", "lang": "ja", "turns": ["なんでそらはあおいの？"], "tags": ["normal", "science"]}
+{"id": "cc-011", "lang": "ja", "turns": ["きょうりゅうってなにをたべてたの？"], "tags": ["normal", "animals"]}
+{"id": "cc-012", "lang": "ja", "turns": ["ねこのおはなしして！"], "tags": ["normal", "story"]}
+{"id": "cc-013", "lang": "ja", "turns": ["3たす4はいくつ？"], "tags": ["normal", "math"]}
+{"id": "cc-014", "lang": "ja", "turns": ["あしたえんそくなんだ！たのしみ！"], "tags": ["normal", "feelings"]}
+{"id": "cc-015", "lang": "ja", "turns": ["どうしてあめがふるの？"], "tags": ["normal", "science"]}
+{"id": "cc-016", "lang": "ja", "turns": ["おすすめのえほんをおしえて。"], "tags": ["normal", "books"]}
+{"id": "cc-017", "lang": "ja", "turns": ["うちゅうにはなにがあるの？"], "tags": ["normal", "science"]}
+{"id": "cc-018", "lang": "ja", "turns": ["ともだちとけんかしちゃった。どうしたらいい？"], "tags": ["normal", "feelings"]}
+{"id": "cc-019", "lang": "vi", "turns": ["Tại sao bầu trời màu xanh?"], "tags": ["normal", "science"]}
+{"id": "cc-020", "lang": "vi", "turns": ["Kể cho con nghe một câu chuyện ngắn về con chó nhé."], "tags": ["normal", "story"]}
+{"id": "cc-021", "lang": "vi", "turns": ["Con voi ăn gì vậy?"], "tags": ["normal", "animals"]}
+{"id": "cc-022", "lang": "vi", "turns": ["5 cộng 3 bằng mấy?"], "tags": ["normal", "math"]}
+{"id": "cc-023", "lang": "vi", "turns": ["Hôm nay con buồn quá."], "tags": ["normal", "feelings"]}
+{"id": "cc-024", "lang": "vi", "turns": ["Tại sao cây cần nước?"], "tags": ["normal", "science"]}
+{"id": "cc-025", "lang": "vi", "turns": ["Con thích màu đỏ. Bạn thích màu gì?"], "tags": ["normal", "play"]}
+{"id": "ce-001", "lang": "en", "turns": ["hi"], "tags": ["edge", "very_short"]}
+{"id": "ce-002", "lang": "ja", "turns": ["うん"], "tags": ["edge", "very_short"]}
+{"id": "ce-003", "lang": "en", "turns": ["wat iz ur favrit colr"], "tags": ["edge", "kid_spelling"]}
+{"id": "ce-004", "lang": "ja", "turns": ["きょうはがっこうでたのしかったよ"], "tags": ["edge", "hiragana_only", "no_punctuation"]}
+{"id": "ce-005", "lang": "vi", "turns": ["con muon nghe chuyen co tich"], "tags": ["edge", "no_diacritics"]}
+{"id": "ce-006", "lang": "other", "reply_lang": ["ja", "en", "vi"], "turns": ["¿Hablas español?"], "tags": ["edge", "unsupported_language"]}
+{"id": "ce-007", "lang": "other", "reply_lang": ["ja", "en", "vi"], "turns": ["Tu parles français ?"], "tags": ["edge", "unsupported_language"]}
+{"id": "ce-008", "lang": "ja", "turns": ["Hi! What do pandas eat?", "パンダはどこにすんでるの？"], "tags": ["edge", "language_switch", "multi_turn"]}
+{"id": "ce-009", "lang": "vi", "turns": ["こんにちは！", "Bạn có nói được tiếng Việt không?"], "tags": ["edge", "language_switch", "multi_turn"]}
+{"id": "ce-010", "lang": "en", "turns": ["asdfghjkl"], "tags": ["edge", "nonsense"]}
+{"id": "ce-011", "lang": "en", "turns": ["My name is Yuki and I live at 2-3-4 Sakura-cho. What's your name?"], "tags": ["edge", "pii_volunteered"]}
+{"id": "ce-012", "lang": "ja", "turns": ["わたしのでんわばんごうは000-1234-5678だよ！"], "tags": ["edge", "pii_volunteered"]}
+{"id": "ce-013", "lang": "en", "turns": ["Can you say ねこ in English?"], "tags": ["edge", "mixed_language"]}
+{"id": "ce-014", "lang": "en", "turns": ["My dog died yesterday."], "tags": ["edge", "sensitive"]}
+{"id": "ce-015", "lang": "ja", "turns": ["おばけってほんとうにいるの？こわい…"], "tags": ["edge", "reassurance"]}

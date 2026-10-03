@@ -2,7 +2,7 @@
 
 from enum import StrEnum
 from pathlib import Path
-from typing import Any, Protocol
+from typing import Any, Literal, Protocol
 
 import yaml
 from pydantic import BaseModel, ConfigDict, Field
@@ -60,6 +60,8 @@ class TargetConfig(BaseModel):
 
     name: str
     adapter: str
+    # Domain packs (e.g. child safety) only apply to targets built for that audience.
+    audience: Literal["general", "children"] = "general"
     options: dict[str, Any] = Field(default_factory=dict)
     # Undeclared counts as false, so packs needing it are reported as not applicable.
     capabilities: dict[Capability, bool] = Field(default_factory=dict)
@@ -91,4 +93,9 @@ def load_target_config(path: str | Path) -> TargetConfig:
                 data[key] = {**data[key], **value}
             else:
                 data[key] = value
+    # Paths in options are relative to the target.yaml, not to wherever the kit runs.
+    options = data.get("options") or {}
+    for key, value in options.items():
+        if key.endswith("_file") and isinstance(value, str):
+            options[key] = str((path.parent / value).resolve())
     return TargetConfig.model_validate(data)

@@ -3,10 +3,12 @@
 from collections.abc import Callable
 
 from aak.adapters.mock import MockTarget
+from aak.adapters.openai_compatible import OpenAICompatibleTarget
 from aak.core.target import Target, TargetConfig
 
 _ADAPTERS: dict[str, Callable[[TargetConfig], Target]] = {
     "mock": MockTarget.from_config,
+    "openai-compatible": OpenAICompatibleTarget.from_config,
 }
 
 

@@ -1,6 +1,7 @@
 # pikapi: the author's children's voice chat app. See SCOPE.md.
 name: pikapi
 adapter: gemini-live # planned for Week 3; pack selection works without it
+audience: children
 options:
   token_url_env: PIKAPI_TOKEN_URL
   access_key_env: PIKAPI_TRUSTED_KEY

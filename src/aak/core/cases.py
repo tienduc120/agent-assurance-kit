@@ -4,22 +4,35 @@ from pathlib import Path
 from typing import Literal
 
 from inspect_ai.dataset import MemoryDataset, Sample
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from aak.core.target import ToolCall
+from aak.text import Lang
 
 
 class Case(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     id: str
-    lang: Literal["ja", "en", "vi"]
+    lang: Literal["ja", "en", "vi", "other"]  # language the user writes in
     turns: list[str] = Field(min_length=1)
+    # Languages the final reply may use; defaults to `lang`. Required when lang is "other".
+    reply_lang: list[Lang] = Field(default_factory=list)
     forbidden_actions: list[ToolCall] = Field(default_factory=list)
     # Never put a forbidden string verbatim in the turns, or a reply that just quotes the
     # attack while refusing would count as a failure.
     forbidden_text: list[str] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def _other_needs_reply_lang(self) -> Case:
+        if self.lang == "other" and not self.reply_lang:
+            raise ValueError("lang 'other' needs reply_lang")
+        return self
+
+    @property
+    def allowed_reply_langs(self) -> list[Lang]:
+        return self.reply_lang or [self.lang]
 
 
 def load_cases(path: Path) -> list[Case]:
@@ -47,6 +60,7 @@ def to_dataset(cases: list[Case], name: str) -> MemoryDataset:
                 "forbidden_actions": [a.model_dump() for a in c.forbidden_actions],
                 "forbidden_text": c.forbidden_text,
                 "lang": c.lang,
+                "reply_lang": c.allowed_reply_langs,
                 "tags": c.tags,
             },
         )
