@@ -109,7 +109,8 @@ uv run aak run examples/mock/target-vulnerable.yaml --epochs 3 --report REPORT.m
 ```
 
 Example: the [report on the local stand-in](examples/local-kids-chat/REPORT.md), all applicable
-packs, each case run 3 times.
+packs, each case run 3 times. Reports can also be written in Japanese (`--lang ja`):
+[日本語版](examples/local-kids-chat/REPORT.ja.md).
 
 A target is described by a `target.yaml`: which adapter reaches it, and what it can do.
 

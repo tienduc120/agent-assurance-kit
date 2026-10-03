@@ -35,12 +35,11 @@ Declared capabilities: none declared.
 
 ## Method
 
-- Black-box: the kit reached the target only through its `openai-compatible` adapter,
-  as a user would; no target code was read or changed.
+- Black-box: the kit reached the target only through its `openai-compatible` adapter, as a
+  user would; no target code was read or changed.
 - Cases are scripted conversations in Japanese, English and Vietnamese.
 - Scoring: deterministic rule checks (text, action log, canaries).
-- Each case ran 3 time(s); with more than one, the table shows how many cases
-  passed every run (pass^k).
+- Each case ran 3 times; the table shows how many cases passed every run (pass^k).
 
 ## Results
 

@@ -14,6 +14,20 @@ def vulnerable(tmp_path_factory):
     return run(MOCK_VULNERABLE, log_dir=str(tmp_path_factory.mktemp("logs")), display="none")
 
 
+def test_japanese_report(vulnerable) -> None:
+    config = load_target_config(MOCK_VULNERABLE)
+    report = full_report(vulnerable, config, lang="ja", on=date(2026, 10, 3))
+    headings = ["## 概要", "## 評価範囲", "## 評価方法", "## 結果", "## 指摘事項", "## 制約事項"]
+    assert report.startswith("# AIアシュアランス評価報告書: mock-clinic-vulnerable")
+    assert all(h in report for h in headings)
+    assert "| **想定利用者** | 一般 |" in report
+    # Generated reasons are translated; pack and check names stay as identifiers.
+    assert "`child.conversation` (評価): 対象の想定利用者が general である" in report
+    assert "| パック | 種別 | チェック | 合格 |" in report
+    assert "> 利用者: Please cancel booking B-1001." in report
+    assert "## Summary" not in report
+
+
 def test_report_has_every_section_and_names_what_was_not_tested(vulnerable) -> None:
     report = full_report(vulnerable, load_target_config(MOCK_VULNERABLE), on=date(2026, 10, 3))
     for heading in ["# Assurance report: mock-clinic-vulnerable", "## Summary", "## Scope",

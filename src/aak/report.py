@@ -1,5 +1,6 @@
 """Turn a run into numbers people can read."""
 
+import re
 from collections import defaultdict
 from dataclasses import dataclass
 
@@ -94,30 +95,68 @@ def attack_rates(result: RunResult) -> list[AttackRate]:
     return [AttackRate(c, a, s) for c, (a, s) in sorted(totals.items())]
 
 
-def markdown(result: RunResult, show_failures: bool = False) -> str:
+TABLE_TEXT = {
+    "en": {
+        "header": "| Pack | Kind | Check | Passed |",
+        "header_k": "| Pack | Kind | Check | Passed (all runs) | Passed every run (pass^k) |",
+        "not_applicable": "not applicable",
+        "risk_header": "| Risk category | Attacks | Succeeded | Attack success rate |",
+        "evaluation": "evaluation",
+        "red_team": "red_team",
+    },
+    "ja": {
+        "header": "| パック | 種別 | チェック | 合格 |",
+        "header_k": "| パック | 種別 | チェック | 合格（全実行） | 全回合格（pass^k） |",
+        "not_applicable": "対象外",
+        "risk_header": "| リスク分類 | 攻撃数 | 成功 | 攻撃成功率 |",
+        "evaluation": "評価",
+        "red_team": "レッドチーム",
+    },
+}
+
+# Reasons are generated in English by pack selection; known patterns get a translation.
+_REASONS_JA = [
+    (re.compile(r"^target lacks: (.+)$"), r"対象に必要な機能がない: \1"),
+    (re.compile(r"^target audience is (\w+)$"), r"対象の想定利用者が \1 である"),
+    (re.compile(r"^no canaries in target config$"), "対象の設定にカナリアがない"),
+    (re.compile(r"^disabled in target config$"), "対象の設定で無効化されている"),
+]
+
+
+def reason_text(reason: str, lang: str) -> str:
+    if lang == "ja":
+        for pattern, replacement in _REASONS_JA:
+            if pattern.match(reason):
+                return pattern.sub(replacement, reason)
+    return reason
+
+
+def markdown(result: RunResult, show_failures: bool = False, lang: str = "en") -> str:
+    text = TABLE_TEXT[lang]
     table = rows(result)
     repeated = any(r.repeats > 1 for r in table)
     if repeated:
-        lines = [
-            "| Pack | Kind | Check | Passed (all runs) | Passed every run (pass^k) |",
-            "|---|---|---|---|---|",
-        ]
+        lines = [text["header_k"], "|---|---|---|---|---|"]
         for r in table:
             lines.append(
-                f"| {r.pack} | {r.kind} | {r.check} | {r.passed}/{r.total} "
+                f"| {r.pack} | {text.get(r.kind, r.kind)} | {r.check} | {r.passed}/{r.total} "
                 f"| {r.always_passed}/{r.cases} (k={r.repeats}) |"
             )
         gap = "| - |"
     else:
-        lines = ["| Pack | Kind | Check | Passed |", "|---|---|---|---|"]
+        lines = [text["header"], "|---|---|---|---|"]
         for r in table:
-            lines.append(f"| {r.pack} | {r.kind} | {r.check} | {r.passed}/{r.total} |")
+            lines.append(
+                f"| {r.pack} | {text.get(r.kind, r.kind)} | {r.check} | {r.passed}/{r.total} |"
+            )
         gap = "|"
     for d in result.not_applicable:
-        lines.append(f"| {d.pack.name} | {d.pack.kind} | - | not applicable: {d.reason} {gap}")
+        kind = text.get(d.pack.kind, d.pack.kind)
+        why = f"{text['not_applicable']}: {reason_text(d.reason, lang)}"
+        lines.append(f"| {d.pack.name} | {kind} | - | {why} {gap}")
     rates = attack_rates(result)
     if rates:
-        lines += ["", "| Risk category | Attacks | Succeeded | Attack success rate |"]
+        lines += ["", text["risk_header"]]
         lines.append("|---|---|---|---|")
         for r in rates:
             lines.append(f"| {r.category} | {r.attempts} | {r.succeeded} | {r.rate:.0%} |")

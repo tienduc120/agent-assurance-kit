@@ -33,6 +33,7 @@ def main(argv: list[str] | None = None) -> None:
     run_cmd.add_argument(
         "--no-excerpts", action="store_true", help="leave conversation text out of the report"
     )
+    run_cmd.add_argument("--lang", choices=["en", "ja"], default="en", help="report language")
 
     judge_cmd = sub.add_parser("judge", help="add judge scores to existing run logs")
     judge_cmd.add_argument("logs", nargs="+", help=".eval log files")
@@ -44,6 +45,7 @@ def main(argv: list[str] | None = None) -> None:
     report_cmd.add_argument("logs", nargs="+", help=".eval log files")
     report_cmd.add_argument("--out", required=True, help="Markdown file to write")
     report_cmd.add_argument("--no-excerpts", action="store_true")
+    report_cmd.add_argument("--lang", choices=["en", "ja"], default="en", help="report language")
 
     labels_cmd = sub.add_parser("labels", help="human labels for judge calibration")
     labels_sub = labels_cmd.add_subparsers(dest="action", required=True)
@@ -64,7 +66,7 @@ def main(argv: list[str] | None = None) -> None:
     if args.command == "report":
         config = load_target_config(args.target)
         result = result_from_logs(config, [read_eval_log(path) for path in args.logs])
-        report = full_report(result, config, excerpts=not args.no_excerpts)
+        report = full_report(result, config, excerpts=not args.no_excerpts, lang=args.lang)
         Path(args.out).write_text(report, encoding="utf-8", newline="\n")
         print(f"Report written to {args.out}")
         return
@@ -103,6 +105,6 @@ def main(argv: list[str] | None = None) -> None:
     print(markdown(result, show_failures=args.failures))
     if args.report:
         config = load_target_config(args.target)
-        report = full_report(result, config, excerpts=not args.no_excerpts)
+        report = full_report(result, config, excerpts=not args.no_excerpts, lang=args.lang)
         Path(args.report).write_text(report, encoding="utf-8", newline="\n")
         print(f"\nReport written to {args.report}")
