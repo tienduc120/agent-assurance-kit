@@ -1,0 +1,13 @@
+# pikapi: the author's children's voice chat app. See SCOPE.md.
+name: pikapi
+adapter: gemini-live # planned for Week 3; pack selection works without it
+options:
+  token_url_env: PIKAPI_TOKEN_URL
+  access_key_env: PIKAPI_TRUSTED_KEY
+capabilities:
+  voice: true
+  web_search: true
+  actions: false # can't book, cancel or change anything
+  action_log: false
+  user_data: false # stores nothing about users
+  roles: false # no login, no staff or owner

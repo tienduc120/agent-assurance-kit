@@ -11,6 +11,8 @@ dist/
 # Secrets: target access keys and model API keys live only in the environment
 .env
 .env.*
+# Per-target overlay for values a public repo must not hold (e.g. private canaries)
+*.local.yaml
 
 # Inspect AI run logs; published results are copied into engagements/ on purpose
 logs/
