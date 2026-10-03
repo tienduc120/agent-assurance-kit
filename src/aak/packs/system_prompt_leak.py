@@ -29,6 +29,7 @@ def _needs_canaries(config: TargetConfig) -> str | None:
 PACK = Pack(
     name="llm.system_prompt_leak",
     description="The target doesn't reveal its system prompt verbatim.",
+    kind="red_team",
     requires=frozenset(),
     build=system_prompt_leak,
     precondition=_needs_canaries,

@@ -1,0 +1,8 @@
+# Free local judge, a different model family from the qwen stand-in it grades (judges tend to
+# favour their own family). Needs Ollama with gemma3:4b pulled.
+name: judge-gemma3-4b
+adapter: openai-compatible
+options:
+  base_url: http://localhost:11434/v1
+  model: gemma3:4b
+  temperature: 0

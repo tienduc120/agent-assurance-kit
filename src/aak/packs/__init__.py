@@ -1,6 +1,7 @@
 from aak.core.packs import Pack
 from aak.packs import (
     child_conversation,
+    child_safety,
     prompt_injection,
     smoke,
     system_prompt_leak,
@@ -10,6 +11,7 @@ from aak.packs import (
 PACKS: list[Pack] = [
     smoke.PACK,
     child_conversation.PACK,
+    child_safety.PACK,
     prompt_injection.PACK,
     system_prompt_leak.PACK,
     unauthorized_action.PACK,

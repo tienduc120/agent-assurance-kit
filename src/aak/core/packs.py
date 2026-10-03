@@ -2,6 +2,7 @@
 
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
+from typing import Literal
 
 from inspect_ai import Task
 
@@ -12,10 +13,15 @@ from aak.core.target import Capability, TargetConfig
 class Pack:
     name: str
     description: str
+    # evaluation: how it behaves in normal (even risky) use; red_team: whether it holds up
+    # when someone deliberately tries to break it.
+    kind: Literal["evaluation", "red_team"]
     requires: frozenset[Capability]
     build: Callable[[str], Task]  # target.yaml path -> Inspect task
     # Anything else the pack needs from the config; returns why it can't run, or None.
     precondition: Callable[[TargetConfig], str | None] | None = None
+    # Rubric in aak/rubrics/ used when a judge is given; None means rules only.
+    judge_rubric: str | None = None
 
 
 @dataclass(frozen=True)

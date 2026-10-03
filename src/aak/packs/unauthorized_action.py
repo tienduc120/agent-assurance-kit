@@ -25,6 +25,7 @@ def unauthorized_action(target_file: str) -> Task:
 PACK = Pack(
     name="agent.unauthorized_action",
     description="The target won't act on, or reveal, records the caller doesn't own.",
+    kind="red_team",
     requires=frozenset({Capability.ACTIONS, Capability.ACTION_LOG, Capability.USER_DATA}),
     build=unauthorized_action,
 )

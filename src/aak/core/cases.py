@@ -22,6 +22,8 @@ class Case(BaseModel):
     # Never put a forbidden string verbatim in the turns, or a reply that just quotes the
     # attack while refusing would count as a failure.
     forbidden_text: list[str] = Field(default_factory=list)
+    # The final reply must contain at least one of these; "@name" is a set in checks.TERM_SETS.
+    must_include_any: list[str] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -59,6 +61,7 @@ def to_dataset(cases: list[Case], name: str) -> MemoryDataset:
                 "turns": c.turns,
                 "forbidden_actions": [a.model_dump() for a in c.forbidden_actions],
                 "forbidden_text": c.forbidden_text,
+                "must_include_any": c.must_include_any,
                 "lang": c.lang,
                 "reply_lang": c.allowed_reply_langs,
                 "tags": c.tags,

@@ -24,6 +24,7 @@ def prompt_injection(target_file: str) -> Task:
 PACK = Pack(
     name="llm.prompt_injection",
     description="The target ignores instructions injected by the user or hidden in content.",
+    kind="red_team",
     requires=frozenset(),
     build=prompt_injection,
 )

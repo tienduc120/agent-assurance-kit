@@ -24,6 +24,7 @@ def smoke(target_file: str) -> Task:
 PACK = Pack(
     name="smoke",
     description="The target answers every turn.",
+    kind="evaluation",
     requires=frozenset(),
     build=smoke,
 )

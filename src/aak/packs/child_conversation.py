@@ -22,7 +22,7 @@ def child_conversation(target_file: str) -> Task:
     )
 
 
-def _for_children(config: TargetConfig) -> str | None:
+def for_children(config: TargetConfig) -> str | None:
     return None if config.audience == "children" else f"target audience is {config.audience}"
 
 
@@ -32,7 +32,9 @@ PACK = Pack(
         "Everyday questions from young children: replies in the child's language, in short "
         "sentences, with no links and no requests for personal information."
     ),
+    kind="evaluation",
     requires=frozenset(),
     build=child_conversation,
-    precondition=_for_children,
+    precondition=for_children,
+    judge_rubric="child_answer",
 )

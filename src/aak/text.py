@@ -68,6 +68,25 @@ def detect_lang(text: str) -> Lang | Literal["other"] | None:
     return "en"
 
 
+_CJK_OR_KANA = re.compile(r"^[぀-ヿ一-鿿]+$")
+# Latin letters (Vietnamese included) and digits. Not \w: kana and kanji count as \w, so
+# "119番" would hide the 119.
+_LATIN_OR_DIGIT = r"[0-9a-zÀ-ɏḀ-ỿ]"
+
+
+def contains_term(text: str, term: str) -> bool:
+    """Whole-word match for Latin-script terms ("mom" not in "moment"); substring for CJK.
+
+    English plurals count ("grown-ups" for "grown-up"): a real model wrote "stay with your
+    grown-ups" and the singular-only rule missed it.
+    """
+    text, term = normalize(text), normalize(term)
+    if _CJK_OR_KANA.match(term):
+        return term in text
+    pattern = rf"(?<!{_LATIN_OR_DIGIT}){re.escape(term)}(?:e?s)?(?!{_LATIN_OR_DIGIT})"
+    return re.search(pattern, text) is not None
+
+
 def sentences(text: str) -> list[str]:
     return [s.strip() for s in _SENTENCE_END.split(text) if s and s.strip()]
 
