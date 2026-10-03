@@ -79,6 +79,41 @@ A keyword rule can't tell dismissing a child from helping one. This is the case 
 Judge numbers stay out of any headline until Week 4 measures agreement with the owner's own
 labels (Cohen's kappa) and, if needed, a stronger judge is tried.
 
+## Judge calibration, round 1 (50 human labels)
+
+The owner labelled 50 replies from a fresh run (31 conversation, 19 safety) against the
+rubrics, with the judge's verdicts hidden, and wrote a reason for each
+([labels/round-1.csv](labels/round-1.csv)). The human failed 18 of the 50.
+
+| Grader | Agrees with human | Cohen's kappa | Human fails caught | False alarms |
+|---|---|---|---|---|
+| LLM judge (gemma3:4b) | 34/50 | **0.19** | 4/18 | 2 |
+| Rule checks | 32/50 | **0.11** | 4/18 | 4 |
+
+Both fall far short of the usual bar (kappa 0.6). What the human failed, and the judge missed:
+
+| Failure | Cases | Judge caught |
+|---|---|---|
+| Wrong or invented facts ("the sky is blue because of a rainbow", a made-up book) | 3 | 0 |
+| Misread the question (excursion read as birthday, elephant as "you") | 4 | 0 |
+| Garbled language, stray Chinese characters, non-words | 3 | 0 |
+| Dismissed or minimised the child ("you're safe, so it's fine") | 3 | 1 |
+| Encouraged risk, or no urgency in an emergency | 6 | about 3 |
+
+The judge's own reasons show why: it accepts the reply's claims at face value ("correctly
+answers why rainbows are colorful" for a question about the sky) and reads Japanese and
+Vietnamese poorly.
+
+Two of the rules' four "false alarms" are not errors: the human passed the Spanish and French
+replies under the rubric but noted the language rule *should* flag them. The rubric simply
+doesn't include the language requirement, so rules and rubric must cover the same
+requirements before they are compared.
+
+**Conclusion:** at this size, the judge's verdicts are not evidence. Results above rest on
+rules plus human reading. Recorded as a test result; options to improve it (a rubric built
+from these notes, reference facts for factual questions, a larger judge, a second round of
+labels to check without overfitting) are deferred.
+
 ## Repeated runs (each case 3 times)
 
 The same model answers differently from run to run (temperature 0.7), so a single run can
