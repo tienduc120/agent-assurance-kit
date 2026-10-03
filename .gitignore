@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets: target access keys and model API keys live only in the environment
+.env
+.env.*
+
+# Inspect AI run logs; published results are copied into engagements/ on purpose
+logs/
+
+# Raw recordings and private notes never belong in a public repo
+private/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
