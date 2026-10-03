@@ -12,7 +12,7 @@ def test_loads_declared_capabilities() -> None:
 
 
 def test_engagement_config_is_valid() -> None:
-    config = load_target_config(PIKAPI)
+    config = load_target_config(PIKAPI, use_local=False)
     assert config.enabled_capabilities == {Capability.VOICE, Capability.WEB_SEARCH}
 
 

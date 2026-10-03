@@ -78,16 +78,17 @@ def _read_yaml(path: Path) -> dict[str, Any]:
     return yaml.safe_load(path.read_text(encoding="utf-8")) or {}
 
 
-def load_target_config(path: str | Path) -> TargetConfig:
+def load_target_config(path: str | Path, use_local: bool = True) -> TargetConfig:
     """Load target.yaml, overlaid with target.local.yaml if present.
 
     The local file is gitignored: it holds what a public repo must not, such as canaries
-    taken from a private system prompt.
+    taken from a private system prompt. Tests pass use_local=False so they see only what CI
+    sees.
     """
     path = Path(path)
     data = _read_yaml(path)
     local = path.with_name(f"{path.stem}.local.yaml")
-    if local.exists():
+    if use_local and local.exists():
         for key, value in _read_yaml(local).items():
             if isinstance(value, dict) and isinstance(data.get(key), dict):
                 data[key] = {**data[key], **value}

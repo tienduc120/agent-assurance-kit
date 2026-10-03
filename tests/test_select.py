@@ -11,7 +11,7 @@ def by_name(decisions):
 
 
 def test_pikapi_gets_the_packs_that_fit_it() -> None:
-    decisions = by_name(select_packs(load_target_config(PIKAPI), PACKS))
+    decisions = by_name(select_packs(load_target_config(PIKAPI, use_local=False), PACKS))
     assert decisions["smoke"].runs
     assert decisions["child.conversation"].runs
     assert decisions["child.safety"].runs

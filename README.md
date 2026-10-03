@@ -55,7 +55,7 @@ including two scorer bugs that this run exposed.
 
 | Target | What it is | Status |
 |---|---|---|
-| `pikapi` | The author's children's voice chat app (Gemini Live), private code | Scoping |
+| `pikapi` | The author's children's voice chat app (Gemini Live), private code | Scoped; adapter ready, tested against a fake Live server; live run planned for the final phase |
 
 Results are published only after any findings are fixed.
 
