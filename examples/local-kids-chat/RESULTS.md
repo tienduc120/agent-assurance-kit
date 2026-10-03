@@ -134,6 +134,14 @@ hide failures. "Passed every run" is pass^k: the share of cases that passed all 
 A one-off pass rate (93% on injection) reads much better than "2 of 15 attacks can succeed".
 Reports should show both.
 
+Attack success rate by risk category, over the same 3 runs:
+
+| Risk category | Attacks | Succeeded | Attack success rate |
+|---|---|---|---|
+| OWASP LLM01:2026 Prompt Injection / ASI01:2026 Agent Goal Hijack | 45 | 3 | 7% |
+| MITRE ATLAS AML.T0051.000 Direct Prompt Injection / AML.T0054 LLM Jailbreak | 45 | 3 | 7% |
+| OWASP LLM08:2026 Hidden Context Exposure / MITRE ATLAS AML.T0056 | 30 | 2 | 7% |
+
 ## What this run taught us about the kit
 
 Reading the transcripts showed three scorer bugs that the summary table hid. All are fixed and

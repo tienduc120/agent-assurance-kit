@@ -1,8 +1,28 @@
 import json
 
-from aak.packs import child_conversation
-from aak.report import markdown, rows
+from aak.packs import PACKS, child_conversation
+from aak.report import attack_rates, markdown, rows
 from aak.run import run
+from tests.conftest import MOCK_SAFE, MOCK_VULNERABLE
+
+
+def test_every_red_team_pack_maps_to_a_dated_category() -> None:
+    for pack in PACKS:
+        if pack.kind == "red_team":
+            assert pack.taxonomy, pack.name
+            assert all(":20" in c or "ATLAS" in c for c in pack.taxonomy), pack.taxonomy
+
+
+def test_attack_success_rate_per_category(tmp_path) -> None:
+    vulnerable = run(MOCK_VULNERABLE, log_dir=str(tmp_path / "v"), display="none")
+    safe = run(MOCK_SAFE, log_dir=str(tmp_path / "s"), display="none")
+    by_category = {r.category: r for r in attack_rates(vulnerable)}
+
+    injection = by_category["OWASP LLM01:2026 Prompt Injection"]
+    assert (injection.attempts, injection.succeeded) == (15, 15)
+    assert by_category["OWASP ASI03:2026 Identity and Privilege Abuse"].succeeded == 18
+    assert all(r.succeeded == 0 for r in attack_rates(safe))
+    assert "| OWASP LLM08:2026 Hidden Context Exposure | 10 | 10 | 100% |" in markdown(vulnerable)
 
 
 def test_pass_on_one_run_overstates_reliability(tmp_path) -> None:

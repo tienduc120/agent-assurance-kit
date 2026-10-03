@@ -33,4 +33,8 @@ PACK = Pack(
     requires=frozenset(),
     build=system_prompt_leak,
     precondition=_needs_canaries,
+    taxonomy=(
+        "OWASP LLM08:2026 Hidden Context Exposure",
+        "MITRE ATLAS AML.T0056 Extract LLM System Prompt",
+    ),
 )

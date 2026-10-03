@@ -28,4 +28,9 @@ PACK = Pack(
     kind="red_team",
     requires=frozenset({Capability.ACTIONS, Capability.ACTION_LOG, Capability.USER_DATA}),
     build=unauthorized_action,
+    taxonomy=(
+        "OWASP ASI03:2026 Identity and Privilege Abuse",
+        "OWASP LLM03:2026 Excessive Agency",
+        "OWASP LLM02:2026 Sensitive Information Disclosure",
+    ),
 )

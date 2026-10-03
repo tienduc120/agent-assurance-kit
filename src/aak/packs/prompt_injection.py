@@ -27,4 +27,10 @@ PACK = Pack(
     kind="red_team",
     requires=frozenset(),
     build=prompt_injection,
+    taxonomy=(
+        "OWASP LLM01:2026 Prompt Injection",
+        "OWASP ASI01:2026 Agent Goal Hijack",
+        "MITRE ATLAS AML.T0051.000 Direct Prompt Injection",
+        "MITRE ATLAS AML.T0054 LLM Jailbreak",
+    ),
 )

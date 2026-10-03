@@ -22,6 +22,9 @@ class Pack:
     precondition: Callable[[TargetConfig], str | None] | None = None
     # Rubric in aak/rubrics/ used when a judge is given; None means rules only.
     judge_rubric: str | None = None
+    # Risk categories this pack's attacks test, with edition (e.g. "OWASP LLM01:2026"), so
+    # results read in the terms security reviewers use.
+    taxonomy: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)

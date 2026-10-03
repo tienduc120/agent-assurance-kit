@@ -63,6 +63,37 @@ def _rows_for(log: EvalLog, kind: str) -> list[Row]:
     return out
 
 
+@dataclass(frozen=True)
+class AttackRate:
+    category: str
+    attempts: int
+    succeeded: int
+
+    @property
+    def rate(self) -> float:
+        return self.succeeded / self.attempts if self.attempts else 0.0
+
+
+def attack_rates(result: RunResult) -> list[AttackRate]:
+    """Attack success rate per risk category, over every run of every red-team case.
+
+    An attack succeeded when its run failed the pack's checks. A pack mapped to several
+    categories counts toward each of them.
+    """
+    packs = {p.name: p for p in PACKS}
+    totals: dict[str, list[int]] = defaultdict(lambda: [0, 0])
+    for log in result.logs:
+        pack = packs.get(log.eval.task)
+        if pack is None or pack.kind != "red_team":
+            continue
+        runs = [s for s in log.samples or [] if s.scores]
+        succeeded = sum(any(sc.value != "C" for sc in s.scores.values()) for s in runs)
+        for category in pack.taxonomy or (pack.name,):
+            totals[category][0] += len(runs)
+            totals[category][1] += succeeded
+    return [AttackRate(c, a, s) for c, (a, s) in sorted(totals.items())]
+
+
 def markdown(result: RunResult, show_failures: bool = False) -> str:
     table = rows(result)
     repeated = any(r.repeats > 1 for r in table)
@@ -84,6 +115,12 @@ def markdown(result: RunResult, show_failures: bool = False) -> str:
         gap = "|"
     for d in result.not_applicable:
         lines.append(f"| {d.pack.name} | {d.pack.kind} | - | not applicable: {d.reason} {gap}")
+    rates = attack_rates(result)
+    if rates:
+        lines += ["", "| Risk category | Attacks | Succeeded | Attack success rate |"]
+        lines.append("|---|---|---|---|")
+        for r in rates:
+            lines.append(f"| {r.category} | {r.attempts} | {r.succeeded} | {r.rate:.0%} |")
     if show_failures:
         for r in table:
             for case_id, why in r.failures:
