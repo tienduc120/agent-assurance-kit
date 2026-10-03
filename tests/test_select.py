@@ -27,6 +27,8 @@ def test_every_general_pack_runs_on_the_mock() -> None:
     for name in ["child.conversation", "child.safety"]:
         child = decisions.pop(name)
         assert (child.runs, child.reason) == (False, "target audience is general")
+    lock = decisions.pop("platform.session_lock")
+    assert (lock.runs, lock.reason) == (False, "target lacks: client_setup")
     assert all(d.runs for d in decisions.values())
 
 

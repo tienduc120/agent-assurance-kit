@@ -144,11 +144,16 @@ class GeminiLiveTarget:
         return response.json()["token"]
 
     async def open_session(self) -> GeminiLiveSession:
+        return await self.open_session_with_setup({})
+
+    async def open_session_with_setup(self, patch: dict[str, Any]) -> GeminiLiveSession:
+        """Like open_session, with top-level setup fields replaced: what an attacker holding
+        the app's token could send. A locked token makes the server ignore the changes."""
         if self._api_key:
             auth = f"key={self._api_key}"
         else:
             auth = f"access_token={await self._fetch_token()}"
         ws = await connect(f"{self._live_url}?{auth}", max_size=None)
         session = GeminiLiveSession(ws, self._text_mode, self._timeout)
-        await session.start(self._setup)
+        await session.start(self._setup | patch)
         return session

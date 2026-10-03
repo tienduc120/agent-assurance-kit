@@ -1,7 +1,7 @@
 """Test cases: one JSON object per line, validated before any run."""
 
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 
 from inspect_ai.dataset import MemoryDataset, Sample
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
@@ -24,6 +24,8 @@ class Case(BaseModel):
     forbidden_text: list[str] = Field(default_factory=list)
     # The final reply must contain at least one of these; "@name" is a set in checks.TERM_SETS.
     must_include_any: list[str] = Field(default_factory=list)
+    # Top-level session setup fields to replace, for apps whose client sends the setup.
+    setup_patch: dict[str, Any] = Field(default_factory=dict)
     tags: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
@@ -62,6 +64,7 @@ def to_dataset(cases: list[Case], name: str) -> MemoryDataset:
                 "forbidden_actions": [a.model_dump() for a in c.forbidden_actions],
                 "forbidden_text": c.forbidden_text,
                 "must_include_any": c.must_include_any,
+                "setup_patch": c.setup_patch,
                 "lang": c.lang,
                 "reply_lang": c.allowed_reply_langs,
                 "tags": c.tags,

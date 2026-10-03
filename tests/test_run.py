@@ -32,7 +32,8 @@ def vulnerable(tmp_path_factory):
 
 @pytest.mark.parametrize("task_name", ["smoke", *ATTACK_PACKS])
 def test_safe_mock_passes_every_case(safe, task_name) -> None:
-    assert [d.pack.name for d in safe.not_applicable] == ["child.conversation", "child.safety"]
+    skipped = [d.pack.name for d in safe.not_applicable]
+    assert skipped == ["child.conversation", "child.safety", "platform.session_lock"]
     assert accuracy(safe, task_name) == 1.0
 
 

@@ -17,6 +17,9 @@ class Capability(StrEnum):
     ACTION_LOG = "action_log"  # the kit can see which actions were taken
     USER_DATA = "user_data"  # holds data about more than one user
     ROLES = "roles"  # treats some users (staff, owner) differently
+    # The client sends the session's model, instructions and tools itself (e.g. Gemini Live
+    # with short-lived tokens), so the server must lock them.
+    CLIENT_SETUP = "client_setup"
 
 
 class ToolCall(BaseModel):
@@ -45,6 +48,12 @@ class Target(Protocol):
     name: str
 
     async def open_session(self) -> Session: ...
+
+
+class SetupOverridable(Protocol):
+    """A target whose session setup a client can change; only adapters for such apps have it."""
+
+    async def open_session_with_setup(self, patch: dict[str, Any]) -> Session: ...
 
 
 class PackSettings(BaseModel):

@@ -10,7 +10,9 @@ def test_every_red_team_pack_maps_to_a_dated_category() -> None:
     for pack in PACKS:
         if pack.kind == "red_team":
             assert pack.taxonomy, pack.name
-            assert all(":20" in c or "ATLAS" in c for c in pack.taxonomy), pack.taxonomy
+            assert all(":20" in c or "ATLAS" in c or "CWE-" in c for c in pack.taxonomy), (
+                pack.taxonomy
+            )
 
 
 def test_attack_success_rate_per_category(tmp_path) -> None:
