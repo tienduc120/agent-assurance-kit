@@ -48,10 +48,14 @@ class FakeLive:
         await ws.send(json.dumps({"serverContent": {"turnComplete": True}}))
 
 
+TOKEN_AUTH = {"token_url_env": "AAK_TOKEN_URL", "access_key_env": "AAK_ACCESS_KEY"}
+
+
 @pytest.fixture
 def env(monkeypatch, tmp_path):
     monkeypatch.setenv("AAK_TOKEN_URL", "https://app.example/api/token")
     monkeypatch.setenv("AAK_ACCESS_KEY", "trusted-key")
+    monkeypatch.setenv("AAK_GEMINI_KEY", "fake-api-key")
     setup_file = tmp_path / "setup.local.yaml"
     setup_file.write_text(json.dumps(SETUP), encoding="utf-8")
     return setup_file
@@ -65,14 +69,13 @@ def token_endpoint(requests: list[httpx.Request], status: int = 200) -> httpx.Mo
     return httpx.MockTransport(handle)
 
 
-def converse(fake: FakeLive, setup_file, transport, *turns: str, **kwargs):
+def converse(fake: FakeLive, setup_file, transport, *turns: str, auth=TOKEN_AUTH, **kwargs):
     async def go():
         async with serve(fake.handler, "127.0.0.1", 0) as server:
             port = server.sockets[0].getsockname()[1]
             target = GeminiLiveTarget(
                 name="t",
-                token_url_env="AAK_TOKEN_URL",
-                access_key_env="AAK_ACCESS_KEY",
+                **auth,
                 setup_file=str(setup_file),
                 live_url=f"ws://127.0.0.1:{port}",
                 transport=transport,
@@ -125,3 +128,27 @@ def test_missing_environment_variable_fails_early(env, monkeypatch) -> None:
     monkeypatch.delenv("AAK_TOKEN_URL")
     with pytest.raises(ValueError, match="AAK_TOKEN_URL"):
         GeminiLiveTarget(name="t", token_url_env="AAK_TOKEN_URL", setup_file=str(env))
+
+
+def test_own_api_key_and_model_skip_the_apps_token_service(env) -> None:
+    # Decoupled from the app's backend: any key, any model, chosen in target.yaml.
+    fake, requests = FakeLive(), []
+    converse(
+        fake,
+        env,
+        token_endpoint(requests),
+        "hi",
+        auth={"api_key_env": "AAK_GEMINI_KEY"},
+        model="other-live-model",
+    )
+    assert requests == []
+    assert fake.paths[0].endswith("key=fake-api-key")
+    assert fake.received[0]["setup"]["model"] == "models/other-live-model"
+
+
+@pytest.mark.parametrize(
+    "auth", [{}, {"token_url_env": "AAK_TOKEN_URL", "api_key_env": "AAK_GEMINI_KEY"}]
+)
+def test_exactly_one_way_to_authenticate(env, auth) -> None:
+    with pytest.raises(ValueError, match="exactly one"):
+        GeminiLiveTarget(name="t", setup_file=str(env), **auth)

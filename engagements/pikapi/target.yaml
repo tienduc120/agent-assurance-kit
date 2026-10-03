@@ -1,5 +1,8 @@
 # pikapi: the author's children's voice chat app. See SCOPE.md.
 # Private values (the session setup, canaries) live in the gitignored *.local.yaml files here.
+# To test with your own Gemini key and model instead of pikapi's token service, put this in
+# target.local.yaml:
+#   options: {token_url_env: null, access_key_env: null, api_key_env: YOUR_KEY_VAR, model: ...}
 name: pikapi
 adapter: gemini-live
 audience: children

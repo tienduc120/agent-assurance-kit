@@ -1,11 +1,14 @@
 """Talks to an app built on the Gemini Live API, the way its own browser client does.
 
-Flow: get a short-lived token from the app's backend, open the Live WebSocket, send the
-app's `setup` message, then send text turns and read the reply's transcript until
-`turnComplete`. Tool calls are answered silently so the model doesn't stall.
+Flow: authenticate, open the Live WebSocket, send the app's `setup` message, then send text
+turns and read the reply's transcript until `turnComplete`. Tool calls are answered silently
+so the model doesn't stall.
 
-The setup body is app-specific (system prompt, voice, tools), so it comes from a file. For a
-private app, keep that file next to target.yaml as *.local.yaml, which is gitignored.
+Nothing here is tied to one app, key or model:
+- Auth is either the app's token service (`token_url_env`, as its browser does) or a Gemini
+  API key of your choice (`api_key_env`), whichever the target.yaml names.
+- The setup body (system prompt, voice, tools) comes from `setup_file`; `model` overrides the
+  model in it. For a private app, keep these in *.local.yaml files, which are gitignored.
 """
 
 import asyncio
@@ -20,10 +23,10 @@ from websockets.asyncio.client import ClientConnection, connect
 
 from aak.core.target import Reply, TargetConfig, ToolCall
 
-LIVE_URL = (
-    "wss://generativelanguage.googleapis.com/ws/"
-    "google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContentConstrained"
-)
+_LIVE = "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta"
+# Ephemeral tokens only work on the constrained endpoint; API keys on the plain one.
+LIVE_URL_TOKEN = f"{_LIVE}.GenerativeService.BidiGenerateContentConstrained"
+LIVE_URL_API_KEY = f"{_LIVE}.GenerativeService.BidiGenerateContent"
 
 
 def _env(name: str | None) -> str | None:
@@ -103,19 +106,26 @@ class GeminiLiveTarget:
     def __init__(
         self,
         name: str,
-        token_url_env: str,
         setup_file: str,
+        token_url_env: str | None = None,
+        api_key_env: str | None = None,
         access_key_env: str | None = None,
-        live_url: str = LIVE_URL,
+        model: str | None = None,
+        live_url: str | None = None,
         text_mode: Literal["client_content", "realtime"] = "client_content",
         turn_timeout_s: float = 60.0,
         transport: httpx.AsyncBaseTransport | None = None,
     ) -> None:
+        if (token_url_env is None) == (api_key_env is None):
+            raise ValueError("set exactly one of token_url_env or api_key_env")
         self.name = name
         self._token_url = _env(token_url_env)
+        self._api_key = _env(api_key_env)
         self._access_key = _env(access_key_env)
         self._setup = yaml.safe_load(Path(setup_file).read_text(encoding="utf-8"))
-        self._live_url = live_url
+        if model:
+            self._setup["model"] = model if model.startswith("models/") else f"models/{model}"
+        self._live_url = live_url or (LIVE_URL_API_KEY if api_key_env else LIVE_URL_TOKEN)
         self._text_mode = text_mode
         self._timeout = turn_timeout_s
         self._transport = transport
@@ -134,8 +144,11 @@ class GeminiLiveTarget:
         return response.json()["token"]
 
     async def open_session(self) -> GeminiLiveSession:
-        token = await self._fetch_token()
-        ws = await connect(f"{self._live_url}?access_token={token}", max_size=None)
+        if self._api_key:
+            auth = f"key={self._api_key}"
+        else:
+            auth = f"access_token={await self._fetch_token()}"
+        ws = await connect(f"{self._live_url}?{auth}", max_size=None)
         session = GeminiLiveSession(ws, self._text_mode, self._timeout)
         await session.start(self._setup)
         return session
