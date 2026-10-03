@@ -59,10 +59,26 @@ Against the bundled mock, every pack passes in `safe` mode, and every attack cas
 `vulnerable` mode (51 of 51). The mock is a scripted test double with known answers, so this
 checks the kit's own scoring, not any real AI.
 
-**First real model:** a free local stand-in for a children's chat app (qwen3.5:4b on Ollama)
-leaked its system prompt, followed an injection split across turns, and answered in Spanish
-and French against its rules. See [examples/local-kids-chat/RESULTS.md](examples/local-kids-chat/RESULTS.md),
-including two scorer bugs that this run exposed.
+**On a real model:** a free local stand-in for a children's chat app (qwen3.5:4b on Ollama)
+leaked its system prompt and followed injected instructions; a hardened prompt and an output
+filter cut injection success from 13% to 2% and leaks to zero, at the cost of one wrongly
+refused question in 40. Human labels showed the LLM judge agrees with a person only at kappa
+0.19. Reading transcripts also exposed four scorer bugs, now fixed and regression-tested. See
+[examples/local-kids-chat/RESULTS.md](examples/local-kids-chat/RESULTS.md).
+
+## Governance
+
+Test results only matter if they support a decision. The kit includes templates for a
+[risk register](templates/governance/RISK_REGISTER.md) and a
+[GSN safety case](templates/governance/SAFETY_CASE.md), the structure used for railway
+signalling (EN 50126/50129), applied to AI agents. Each claim links to its evidence, and an
+unsupported claim blocks release.
+
+Worked example: the local stand-in's [risk register](examples/local-kids-chat/governance/RISK_REGISTER.md)
+and [safety case](examples/local-kids-chat/governance/SAFETY_CASE.md). It concludes **not
+acceptable yet**: security claims hold (injection 2%, no leaks), but emergencies and reports of
+harm are handled badly in 10 of 19 labelled safety replies, and automated grading can't yet be
+trusted to catch that.
 
 ## Engagements
 
