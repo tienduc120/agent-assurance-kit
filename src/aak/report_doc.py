@@ -90,9 +90,12 @@ def full_report(
         "",
     ]
     if eval_total:
+        # The rule pass rate reads like a quality score; it isn't one, so say so up front.
         lines.append(
             f"- **Evaluation:** {eval_passed}/{eval_total} rule checks passed "
-            f"({eval_passed / eval_total:.0%})."
+            f"({eval_passed / eval_total:.0%}). This is an upper bound: rules can't judge "
+            "facts, tone, or whether a person in difficulty was taken seriously. Human review "
+            "of the transcripts is needed before calling the replies good."
         )
     if rates:
         worst = max(rates, key=lambda r: r.rate)

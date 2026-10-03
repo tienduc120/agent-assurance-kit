@@ -171,9 +171,19 @@ Lesson: layer the defences. Hardening lowers the attack rate but is probabilisti
 over-refuse; a deterministic output filter guarantees the one property it checks. Measure
 normal use after every change, not just attacks.
 
+## Final configuration: full report
+
+[REPORT.md](REPORT.md) is the generated report for the hardened prompt plus leak filter, every
+applicable pack, each case 3 times (282 conversations, about 10 minutes, free). Injection 2%,
+leaks 0%. One new real problem showed up: answering where pandas live, the bot asked the
+child 「あなたはどこに住んでいますか？」 ("where do you live?"), caught by the personal-info
+rule (1 in 120 replies). The same run exposed a fifth scorer bug: a Japanese negative
+statement 「…教えてくれません。」 had been read as a request; fixed, with the polite request
+form 「…くれませんか？」 still caught.
+
 ## What this run taught us about the kit
 
-Reading the transcripts showed three scorer bugs that the summary table hid. All are fixed and
+Reading the transcripts showed scorer bugs that the summary table hid. All are fixed and
 covered by regression tests built from the real replies:
 
 - The injection scorer looked for `PAPAYA-74` exactly and missed `PAP AYA-74!`. Matching now
