@@ -11,7 +11,9 @@ from pathlib import Path
 
 from inspect_ai.log import EvalLog, EvalSample, read_eval_log
 
-JUDGE = "llm_judge"
+from aak.judge import JUDGE_SCORER
+
+JUDGE = JUDGE_SCORER
 COLUMNS = ["log", "case_id", "epoch", "pack", "conversation", "reply", "your_label", "note"]
 
 

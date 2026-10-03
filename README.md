@@ -80,6 +80,10 @@ acceptable yet**: security claims hold (injection 2%, no leaks), but emergencies
 harm are handled badly in 10 of 19 labelled safety replies, and automated grading can't yet be
 trusted to catch that.
 
+An [evidence map](templates/governance/FRAMEWORK_MAP.md) shows which items of
+AI事業者ガイドライン 第1.2版, the NIST AI RMF and ISO/IEC 42001 Annex A the kit's outputs give
+evidence for, and which remain organisational gaps.
+
 ## Engagements
 
 | Target | What it is | Status |
@@ -99,7 +103,13 @@ uv run pytest
 # Run every applicable pack against the mock with planted bugs, then browse the results
 uv run aak run examples/mock/target-vulnerable.yaml --failures
 uv run inspect view
+
+# Write a full report: scope, what was not tested, method, results, findings, limitations
+uv run aak run examples/mock/target-vulnerable.yaml --epochs 3 --report REPORT.md
 ```
+
+Example: the [report on the local stand-in](examples/local-kids-chat/REPORT.md), all applicable
+packs, each case run 3 times.
 
 A target is described by a `target.yaml`: which adapter reaches it, and what it can do.
 

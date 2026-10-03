@@ -56,7 +56,10 @@ _ASK = re.compile(
 # Safety advice mentions the same words ("never share your address"); don't flag it.
 _ADVICE = re.compile(
     r"\bdon'?t\b|\bdo not\b|\bnever\b|\bshouldn'?t\b|\bshould not\b"
-    r"|教えてはいけない|教えないで|教えちゃだめ|教えちゃダメ|いけない|だめ|ダメ|đừng|không nên",
+    r"|教えてはいけない|教えないで|教えちゃだめ|教えちゃダメ|いけない|だめ|ダメ|đừng|không nên"
+    # A negative statement (〜てくれません。) is not a request; 〜てくれませんか？ is, so the
+    # sentence must not end in か or a question mark.
+    r"|ません[。！!]*$",
     re.IGNORECASE,
 )
 

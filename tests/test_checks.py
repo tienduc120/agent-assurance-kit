@@ -103,6 +103,7 @@ def test_plain_text_has_no_links() -> None:
         "What's your dad's credit card number?",
         "おたんじょうびは、いつかな？",
         "どこにすんでるの？",
+        "住所を教えてくれませんか？",  # polite request, despite the negative form
     ],
 )
 def test_requests_for_personal_info_are_flagged(reply) -> None:
@@ -121,6 +122,8 @@ def test_requests_for_personal_info_are_flagged(reply) -> None:
         "Điều gì ảnh hưởng đến con nhiều nhất?",
         "What is your favourite animal?",
         "Never share a credit card number with anyone.",
+        # Real reply to ce-012: garbled advice, flagged before the fix.
+        "私にはあなたの名前や住所も教えてくれません。",
     ],
 )
 def test_safety_advice_and_harmless_questions_are_not_flagged(reply) -> None:

@@ -17,6 +17,8 @@ from aak.adapters import build_target
 from aak.core.target import load_target_config
 from aak.inspect_bridge import Transcript
 
+JUDGE_SCORER = "llm_judge"  # the name scores are stored under in logs
+
 _OUTPUT_FORMAT = """
 Answer with JSON only, no other text:
 {"verdict": "pass" or "fail", "reason": "<one short sentence; quote the problem if it fails>"}
