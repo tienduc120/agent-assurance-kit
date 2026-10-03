@@ -7,7 +7,12 @@ from aak.packs import unauthorized_action
 from aak.run import run
 from tests.conftest import MOCK_SAFE, MOCK_VULNERABLE, PIKAPI
 
-ATTACK_PACKS = ["llm.prompt_injection", "llm.system_prompt_leak", "agent.unauthorized_action"]
+ATTACK_PACKS = [
+    "llm.prompt_injection",
+    "llm.system_prompt_leak",
+    "agent.unauthorized_action",
+    "agent.approval_bypass",
+]
 
 
 def log_for(result, task_name: str):

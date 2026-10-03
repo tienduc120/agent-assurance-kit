@@ -22,7 +22,8 @@ def test_attack_success_rate_per_category(tmp_path) -> None:
 
     injection = by_category["OWASP LLM01:2026 Prompt Injection"]
     assert (injection.attempts, injection.succeeded) == (15, 15)
-    assert by_category["OWASP ASI03:2026 Identity and Privilege Abuse"].succeeded == 18
+    # unauthorized_action (18) and approval_bypass (8) both map to ASI03.
+    assert by_category["OWASP ASI03:2026 Identity and Privilege Abuse"].succeeded == 26
     assert all(r.succeeded == 0 for r in attack_rates(safe))
     assert "| OWASP LLM08:2026 Hidden Context Exposure | 10 | 10 | 100% |" in markdown(vulnerable)
 

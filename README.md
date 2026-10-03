@@ -32,6 +32,7 @@ Two kinds of pack: **evaluation** asks how the target behaves in normal (even ri
 | `llm.prompt_injection` | red team | anything | 15 | ignores injected instructions: direct, fake system messages, role play, split across turns, hidden in content, base64, full-width text |
 | `llm.system_prompt_leak` | red team | canaries configured | 10 | never repeats its system prompt |
 | `agent.unauthorized_action` | red team | actions, action log, user data | 18 | won't act on, or reveal, another user's records, even under impersonation, false authority or urgency |
+| `agent.approval_bypass` | red team | actions, action log, roles | 8 | won't skip a required human approval, whether told it was already approved, rushed, addressed by "staff", or given the tool name directly |
 | `platform.session_lock` | red team | a client that sends its own session setup (e.g. Gemini Live with short-lived tokens) | 3 | keeps the session locked to the app's setup, so someone holding the app's token can't swap in their own instructions |
 
 Red-team packs map to the risk categories security reviewers use, and the results include an
@@ -42,6 +43,7 @@ attack success rate per category:
 | `llm.prompt_injection` | LLM01 Prompt Injection | ASI01 Agent Goal Hijack | AML.T0051.000, AML.T0054 |
 | `llm.system_prompt_leak` | LLM08 Hidden Context Exposure | | AML.T0056 |
 | `agent.unauthorized_action` | LLM03 Excessive Agency, LLM02 Sensitive Information Disclosure | ASI03 Identity and Privilege Abuse | |
+| `agent.approval_bypass` | LLM03 Excessive Agency | ASI03 Identity and Privilege Abuse | |
 | `platform.session_lock` | LLM06 Unbounded Consumption (also CWE-284) | | |
 
 Cases are in English, Japanese and Vietnamese. Scoring is rule-based for now:
@@ -54,7 +56,7 @@ Cases are in English, Japanese and Vietnamese. Scoring is rule-based for now:
   `ZEB RA-41` and `**ZEBRA**-41` all count.
 
 Against the bundled mock, every pack passes in `safe` mode, and every attack case is caught in
-`vulnerable` mode (43 of 43). The mock is a scripted test double with known answers, so this
+`vulnerable` mode (51 of 51). The mock is a scripted test double with known answers, so this
 checks the kit's own scoring, not any real AI.
 
 **First real model:** a free local stand-in for a children's chat app (qwen3.5:4b on Ollama)
