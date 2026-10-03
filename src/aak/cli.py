@@ -65,7 +65,7 @@ def main(argv: list[str] | None = None) -> None:
         config = load_target_config(args.target)
         result = result_from_logs(config, [read_eval_log(path) for path in args.logs])
         report = full_report(result, config, excerpts=not args.no_excerpts)
-        Path(args.out).write_text(report, encoding="utf-8")
+        Path(args.out).write_text(report, encoding="utf-8", newline="\n")
         print(f"Report written to {args.out}")
         return
     if args.command == "labels" and args.action == "export":
@@ -104,5 +104,5 @@ def main(argv: list[str] | None = None) -> None:
     if args.report:
         config = load_target_config(args.target)
         report = full_report(result, config, excerpts=not args.no_excerpts)
-        Path(args.report).write_text(report, encoding="utf-8")
+        Path(args.report).write_text(report, encoding="utf-8", newline="\n")
         print(f"\nReport written to {args.report}")
