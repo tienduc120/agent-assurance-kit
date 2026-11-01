@@ -537,7 +537,7 @@ wheels = [
 
 [[package]]
 name = "inspect-ai"
-version = "0.3.276"
+version = "0.3.286"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "agent-client-protocol" },
@@ -580,9 +580,9 @@ dependencies = [
     { name = "zipp" },
     { name = "zstandard" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/33/31/59dc578e591e79c4a3a2fe3436e2a828d6dfd5a43de9f1c107835fc55ee3/inspect_ai-0.3.276.tar.gz", hash = "sha256:14cb59b52961cf962bd4a37d44e5040c0c521cb18b131950530f795663e8c45d", size = 36080195, upload-time = "2026-10-02T15:01:27.093Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e1/2d/6b88c050adf3c88f25ad02deab8a3da67d55eebed25d19ed83629335369f/inspect_ai-0.3.286.tar.gz", hash = "sha256:ce71524a938fb96951b8185364c1dfaa612ffe5c129afefb9488480d4b14287e", size = 36775635, upload-time = "2026-10-28T14:25:20.017Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/01/be/a060879d207660229446d96b173969c036eec8604e1ab7f022b78cc8987b/inspect_ai-0.3.276-py3-none-any.whl", hash = "sha256:42849799ba4f51d272a7ca2385e8e78ea3ef911ec9a71a3054fb115bd4e78dbf", size = 34896487, upload-time = "2026-10-02T15:01:18.81Z" },
+    { url = "https://files.pythonhosted.org/packages/6d/01/bb308a114fa0dec02a0d9d07075cc1eb16c1d7d35c4359dfa230747bcb0f/inspect_ai-0.3.286-py3-none-any.whl", hash = "sha256:f11c2afed84026507d902bbcc68e7a8ee95e8070786ba2914c880761e97a220f", size = 35508580, upload-time = "2026-10-28T14:25:16.574Z" },
 ]
 
 [[package]]
@@ -906,11 +906,11 @@ wheels = [
 
 [[package]]
 name = "nest-asyncio2"
-version = "1.7.3"
+version = "1.7.4"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5e/a6/a2775b388a14b5ea0c894bbe513c0d3e04e65e8ae583e60f5357722b8e03/nest_asyncio2-1.7.3.tar.gz", hash = "sha256:2e9a84d5d1efe6d020c72988d21aec569bac42d98af2ff6b9de24640c5d22a34", size = 15642, upload-time = "2026-09-22T17:15:06.709Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/32/2c/70e3b6bb2189cfd260280b7e1042bd622949a258663f95e887fada4ac1e6/nest_asyncio2-1.7.4.tar.gz", hash = "sha256:995b1409d926ec55e0876ea39a69bffdd8852cf1db3652c177e8c8ffdbcaf3cc", size = 16891, upload-time = "2026-10-07T22:31:50.507Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/29/dd/a8bebc78975a7466932077a0973cbab4361a32368b1d28d40683ec19333c/nest_asyncio2-1.7.3-py3-none-any.whl", hash = "sha256:2bc87bdca654e719425145f5e84eaeb0080b013fdd47d65729a7d66243f4987c", size = 8364, upload-time = "2026-09-22T17:15:05.492Z" },
+    { url = "https://files.pythonhosted.org/packages/09/ed/559d2915dce85794bc0c36064043da170da50cd98746dcbddd85d5932017/nest_asyncio2-1.7.4-py3-none-any.whl", hash = "sha256:86e77b52c3d1496b294af3c944b44213b9b82a12a5ee590c0acc4ca4692ef6c7", size = 8543, upload-time = "2026-10-07T22:31:49.245Z" },
 ]
 
 [[package]]
